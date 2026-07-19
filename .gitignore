@@ -1,0 +1,6 @@
+node_modules/
+stadion-x-app-backup.zip
+dist/
+.env
+.env.local
+*.log

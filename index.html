@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STADION X OS - Unified Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#D4AF37",
+                        surface: "#050505",
+                        surfaceHigh: "#121212"
+                    },
+                    fontFamily: {
+                        body: ["Hanken Grotesk", "sans-serif"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #030303;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-image: radial-gradient(circle at 50% 0%, #1a1505 0%, #030303 60%);
+        }
+        
+        /* Animated Luxury Background Mesh */
+        .bg-mesh {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(212, 175, 55, 0.04), transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.03), transparent 30%);
+            animation: meshPulse 20s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes meshPulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        #app-frame {
+            width: 100%;
+            height: 100vh; /* Full height */
+            border: none;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+        
+        /* Glassmorphism Dock */
+        .dock-container {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(150px);
+            z-index: 50;
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 12px;
+            border-radius: 28px;
+            background: rgba(20, 20, 20, 0.3);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 16px;
+        }
+        
+        .dock-container.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .dock-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            color: #999;
+            padding: 14px 28px;
+            border-radius: 20px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dock-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .dock-btn:hover {
+            transform: scale(1.05) translateY(-4px);
+            color: #fff;
+            border-color: rgba(212, 175, 55, 0.2);
+            background: rgba(212, 175, 55, 0.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        
+        .dock-btn:hover::before {
+            opacity: 1;
+        }
+        
+        .dock-btn.active {
+            color: #D4AF37;
+            background: rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.2), inset 0 1px 0 rgba(212, 175, 55, 0.2);
+            font-weight: 700;
+        }
+        
+        .dock-btn .material-symbols-outlined {
+            font-size: 22px;
+            font-weight: 300;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .dock-btn:hover .material-symbols-outlined {
+            transform: scale(1.15);
+        }
+        
+        /* Premium Loading Screen */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #030303;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+        
+        .loader-ring {
+            width: 72px;
+            height: 72px;
+            position: relative;
+            animation: pulse-ring 2.5s infinite ease-in-out;
+        }
+
+        .loader-ring::before,
+        .loader-ring::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid transparent;
+        }
+
+        .loader-ring::before {
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-top-color: #D4AF37;
+            border-left-color: rgba(212, 175, 55, 0.2);
+            animation: spin 1.5s linear infinite;
+        }
+
+        .loader-ring::after {
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border-bottom-color: #fff;
+            border-right-color: rgba(255, 255, 255, 0.1);
+            animation: spin-reverse 2s linear infinite;
+        }
+        
+        .loading-text {
+            color: #fff;
+            letter-spacing: 0.4em;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-top: 40px;
+            background: linear-gradient(90deg, #666 0%, #D4AF37 50%, #666 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes spin-reverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+        @keyframes pulse-ring {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.1)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.4)); }
+        }
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+    </style>
+</head>
+<body class="font-body">
+    <div class="bg-mesh"></div>
+
+    <!-- The Iframe container to hold different applications -->
+    <iframe id="app-frame" src="stadion_x_portal_entry_elite_clean/code.html" allow="fullscreen; clipboard-read; clipboard-write; autoplay"></iframe>
+
+    <!-- Unified OS Dock -->
+    <div class="dock-container">
+        <button class="dock-btn active" onclick="loadApp('stadion_x_portal_entry_elite_clean/code.html', this)">
+            <span class="material-symbols-outlined">login</span>
+            Portal Entry
+        </button>
+        <button class="dock-btn" onclick="loadApp('arc_mission_control_elite_clean/code.html', this)">
+            <span class="material-symbols-outlined">security</span>
+            Mission Control
+        </button>
+        <button class="dock-btn" onclick="loadApp('fan_experience_portal_elite_clean/code.html', this)">
+            <span class="material-symbols-outlined">stadium</span>
+            Fan Experience
+        </button>
+    </div>
+
+    <!-- Initial Loading Screen -->
+    <div class="loading-overlay" id="loading">
+        <div class="flex flex-col items-center">
+            <div class="loader-ring"></div>
+            <h1 class="loading-text">Initializing Stadion X OS</h1>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loading = document.getElementById('loading');
+                loading.style.opacity = '0';
+                loading.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                }, 1200);
+            }, 1200);
+        });
+
+        // Expose function for the child iframe to call upon successful login
+        window.loginSuccess = function() {
+            // Show the dock
+            document.querySelector('.dock-container').classList.add('visible');
+            // Transition to Mission Control
+            const missionControlBtn = document.querySelectorAll('.dock-btn')[1];
+            loadApp('arc_mission_control_elite_clean/code.html', missionControlBtn);
+        };
+
+        function loadApp(src, btn) {
+            // Update Iframe
+            const frame = document.getElementById('app-frame');
+            frame.style.opacity = '0';
+            frame.style.transform = 'scale(0.98)';
+            
+            setTimeout(() => {
+                frame.onload = () => {
+                    frame.style.opacity = '1';
+                    frame.style.transform = 'scale(1)';
+                };
+                frame.src = src;
+            }, 400);
+
+            // Update Active State
+            document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

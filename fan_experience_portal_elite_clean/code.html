@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stadion X - Premium Fan Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#D4AF37",
+                        "primary-container": "#D4AF37",
+                        "on-primary": "#000000",
+                        "secondary": "#c8c6c5",
+                        "secondary-container": "#2a2a2a",
+                        "background": "#000000",
+                        "surface": "#080808",
+                        "surface-container": "#111111",
+                        "surface-container-high": "#1a1a1a",
+                        "outline": "#4a4a4a",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#b1b1b1",
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1.5rem",
+                        "3xl": "2rem",
+                        "4xl": "32px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "sm": "8px",
+                        "xl": "40px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "20": "5rem",
+                        "64": "16rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Hanken Grotesk"],
+                        "caption": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "display-lg-mobile": ["Hanken Grotesk"],
+                        "label-bold": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "500", "letterSpacing": "0.05em"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "0.02em", "fontWeight": "700"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "0.01em", "fontWeight": "700"}],
+                        "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600", "letterSpacing": "0.02em"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #030303;
+            color: #e5e2e1;
+        }
+        
+        .liquid-glass {
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        
+        .liquid-glass:hover {
+            border-color: rgba(212, 175, 55, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.9), 0 0 20px rgba(212, 175, 55, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+        }
+        
+        .gold-glow-strong {
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .text-glow-gold {
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+        
+        .atmospheric-diffusion {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.03) 0%, rgba(0,0,0,0) 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); }
+            50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.2); }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased min-h-screen relative overflow-x-hidden selection:bg-primary selection:text-black">
+<!-- Deep Black Background -->
+<div class="fixed inset-0 z-[-1] bg-[#030303]">
+<div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.02] via-[#030303] to-[#030303]"></div>
+</div>
+<!-- Ambient Gold Glows -->
+<div class="atmospheric-diffusion top-[-250px] left-[-150px]"></div>
+<div class="atmospheric-diffusion bottom-[-250px] right-[-150px] opacity-30"></div>
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#050505]/60 backdrop-blur-3xl border-b border-white/5 shadow-2xl flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 transition-all duration-300">
+<div class="flex items-center gap-md">
+<img alt="STADION X Logo" class="h-10 w-10 object-contain rounded-lg opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx0C2xHyDhTWOeLB-3o8XV7BSnUdYa-k8VODpoN1rIEcI0MkcXNTHNWDWXn3S4r6fyVp-WMZzjORFb8Bqb9Rl0b_hfRE905Dz5CCutqZ0PFSA_6-FlHKAP_BjSH1xcTyYB3P6BJMEAChVmBnfu734g3jPAkVKsJGIhcte4kAu8G0Ie84kEuD2VtO9-x_lAuI_ISs2aQm0xuDtqr9IxI2b428NKpDRAGFWQpPlYnXB_O8kg57Iet6Ba"/>
+<span class="font-display-lg text-display-lg-mobile md:text-[28px] font-black tracking-[0.2em] uppercase text-[#FF0000]">STADION X</span>
+</div>
+<!-- Desktop Nav Links -->
+<div class="hidden md:flex items-center gap-xl font-label-bold text-label-bold uppercase tracking-[0.15em]">
+<a class="text-primary border-b-2 border-primary pb-1 hover:text-primary/80 transition-colors duration-200" href="#">Fan Portal</a>
+<a class="text-secondary hover:text-primary transition-colors duration-200" href="#">Mission Control</a>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-secondary hover:text-primary transition-colors duration-200 p-sm rounded-full hover:bg-white/5 active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-secondary hover:text-primary transition-colors duration-200 p-sm rounded-full hover:bg-white/5 active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-surface-container-high border border-white/10 overflow-hidden flex items-center justify-center cursor-pointer hover:border-primary transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.02)] hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] opacity-90">
+<img alt="User profile" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBX3LihALraW-q-gYuwyB4QVUwRK3qFZIVM5PcwkO6iE_JWfQcpRu3s3Frr1IAM2N5LrhyEbtKVkGAOuMKVYk8UNDif6jpUFWRgjl1Axt-p5HKk0n70MSkuE-lfUNl77oRXl-nzdkHuNR4jld_bNGYrd4mKxo2I9nLMLVZ-HLQ_Awe_WEs8gYpBL9KlCRjumRrf7t1BpS4xJvXJmcxqTOr3TcjZinAfJfGzNtdLXRQXmCWNxJoOyO6a"/>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-32 pb-20 px-margin-mobile md:px-margin-desktop max-w-[1600px] mx-auto relative z-10 grid grid-cols-1 md:grid-cols-12 gap-xl">
+<!-- Header Section -->
+<header class="col-span-1 md:col-span-12 mb-md animate-fade-in-up">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-sm tracking-wide">Welcome Back, Alex Rivers</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant tracking-[0.05em] uppercase text-sm">Matchday 14 • Stadium</p>
+</header>
+<!-- Left Column: Smart Ticket (Bento Card) -->
+<section class="col-span-1 md:col-span-4 flex flex-col gap-lg animate-fade-in-up stagger-1">
+<div class="liquid-glass rounded-4xl p-xl flex flex-col relative overflow-hidden group h-full transition-all duration-500">
+<div class="flex justify-between items-start mb-xl relative z-10">
+<div>
+<div class="bg-[#D4AF37]/10 text-[#D4AF37] font-label-bold text-caption px-md py-sm rounded-full inline-flex items-center gap-xs mb-lg uppercase tracking-[0.15em] border border-[#D4AF37]/20">
+<span class="material-symbols-outlined filled text-[14px]">sensors</span>
+                        Live Entry
+                    </div>
+<h2 class="font-headline-md text-headline-md text-white tracking-wide">Match Ticket</h2>
+<p class="text-on-surface-variant mt-sm font-label-bold tracking-[0.15em] text-caption uppercase">Section 114 • Row G • Seat 22</p>
+</div>
+<span class="material-symbols-outlined text-[28px] text-primary/40 group-hover:text-primary transition-colors duration-500">confirmation_number</span>
+</div>
+<!-- Ticket Image - Scaled Down -->
+<div class="flex-grow flex items-center justify-center py-lg relative z-10">
+<div class="w-full max-w-[200px] aspect-[3/4] border border-white/5 rounded-3xl flex items-center justify-center relative overflow-hidden transition-all duration-500 bg-black/60 group-hover:border-primary/30 shadow-2xl">
+<img alt="Match Ticket" class="w-full h-full object-cover opacity-90 mix-blend-screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZaS_X40IYpvPwDxFvGWBL64Cpo3sqRm069DVRFTgz72EsJfAkovO6VFVAzeZaLGNbM8kLllw9Bo6sZ2A08TjKvEVILB2TrP-w6NY4VfHTzGejmSmIiOP-B8g9j5AbT9eH2yThthKDDdQ-KTKUl6d0KjRjGh_ksr2z40AIkwIS7qVFH4vtBUbKk4L5-Cux0QXG23fCrA3naJPRUws1Bnau4RMfc5rBOzZJuLsd-4MCjIcOIHtcXB8I"/>
+</div>
+</div>
+<div class="mt-lg border-t border-white/5 pt-lg flex justify-between items-center relative z-10">
+<div>
+<p class="text-caption text-on-surface-variant tracking-[0.1em] uppercase mb-xs">Gate Opens</p>
+<p class="font-headline-md text-white">18:00 <span class="text-body-md text-on-surface-variant font-normal">Local</span></p>
+</div>
+<div class="text-right">
+<p class="text-caption text-on-surface-variant tracking-[0.1em] uppercase mb-xs">Status</p>
+<p class="font-label-bold text-primary uppercase tracking-[0.15em]">Ready for Scan</p>
+</div>
+</div>
+</div>
+<!-- Quick Action Button -->
+<button class="w-full bg-[#D4AF37] hover:bg-[#B3932F] text-black font-label-bold text-[14px] py-lg rounded-full transition-all duration-300 flex items-center justify-center gap-md active:scale-[0.98] mt-sm uppercase tracking-[0.15em]">
+<span class="material-symbols-outlined font-bold text-[20px]">account_balance_wallet</span>
+            Add to Apple Wallet
+        </button>
+</section>
+<!-- Right Column: Service Cards (Bento Grid) -->
+<section class="col-span-1 md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-lg content-start">
+<!-- Seat Map - Reduced Image Dominance -->
+<div class="liquid-glass rounded-4xl p-lg sm:col-span-2 flex flex-col sm:flex-row gap-xl items-center cursor-pointer transition-all duration-500 animate-fade-in-up stagger-2 group">
+<div class="w-full sm:w-48 h-48 rounded-2xl overflow-hidden relative border border-white/5 group-hover:border-primary/20 transition-colors shadow-2xl shrink-0">
+<img alt="Stadium View" class="absolute inset-0 w-full h-full object-cover opacity-80 transform group-hover:scale-105 transition-transform duration-700 mix-blend-luminosity hover:mix-blend-normal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOp9Clrk6bx7oI98a7IICkl6mhr8hdBPmh20pscxMRfX2tPvZ2NDFAzUIGO2uW9D5UvGAbOfwCv_IhN_0pTbA9jizzDZqGTGft0Q3kCh3aPHSXpOLfK9vkfIzzkgx6z8h1aY06dcRFksg7Gd8p8Xrb0F96_ZWAGjK4-dGgS85WAx8DnBvFi-_49HbABYXN2CUdlY5JEIqXRav4MEwyhxYynQsFdTFOC6Rnaibcna61nDrjFjL2TLIM"/>
+</div>
+<div class="w-full sm:flex-1 flex flex-col justify-center py-md pr-md">
+<div class="flex items-center gap-sm text-primary mb-md">
+<span class="material-symbols-outlined text-[18px]">map</span>
+<span class="font-label-bold text-caption tracking-[0.15em] uppercase">Navigation</span>
+</div>
+<h3 class="font-display-lg-mobile text-[28px] text-white mb-sm tracking-wide">Seat Map</h3>
+<p class="text-on-surface-variant text-body-lg mb-lg leading-relaxed">Navigate to your seat, locate amenities, and preview the view.</p>
+<div class="flex items-center text-primary group-hover:text-primary transition-colors text-label-bold font-label-bold uppercase tracking-[0.15em] text-[13px]">
+                    Explore Map <span class="material-symbols-outlined ml-sm text-[18px] group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Food & Bev -->
+<div class="liquid-glass rounded-4xl p-xl flex flex-col cursor-pointer transition-all duration-500 animate-fade-in-up stagger-3 group h-full">
+<div class="h-12 w-12 rounded-full bg-white/5 border border-white/5 flex items-center justify-center mb-lg group-hover:border-primary/50 group-hover:bg-primary/5 transition-colors duration-300">
+<span class="material-symbols-outlined text-primary text-[24px]">restaurant</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-white mb-sm tracking-wide">In-Seat Dining</h3>
+<p class="text-on-surface-variant text-body-md mb-xl flex-grow leading-relaxed">Menus delivered directly to Section 114. Wait time: ~12 mins.</p>
+<div class="w-full h-[2px] bg-white/5 rounded-full overflow-hidden mt-auto">
+<div class="h-full bg-primary w-[30%] shadow-[0_0_10px_rgba(212,175,55,0.5)] rounded-full"></div>
+</div>
+</div>
+<!-- Service Requests -->
+<div class="liquid-glass rounded-4xl p-xl flex flex-col cursor-pointer transition-all duration-500 animate-fade-in-up stagger-4 group h-full">
+<div class="h-12 w-12 rounded-full bg-white/5 border border-white/5 flex items-center justify-center mb-lg group-hover:border-primary/50 group-hover:bg-primary/5 transition-colors duration-300">
+<span class="material-symbols-outlined text-primary text-[24px]">room_service</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-white mb-sm tracking-wide">Guest Services</h3>
+<p class="text-on-surface-variant text-body-md mb-xl flex-grow leading-relaxed">Dedicated assistance, upgrades, and matchday arrangements.</p>
+<div class="flex items-center text-primary text-label-bold font-label-bold uppercase tracking-[0.15em] mt-auto text-[13px]">
+                Request Service <span class="material-symbols-outlined ml-sm text-[18px] group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</div>
+</section>
+</main>
+</body></html>

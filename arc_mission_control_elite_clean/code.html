@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARC Mission Control - Elite</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-container": "#D4AF37",
+                        "secondary-container": "#1A1A1A",
+                        "on-primary": "#000000",
+                        "tertiary-fixed-dim": "#D4AF37",
+                        "on-tertiary-container": "#332600",
+                        "secondary-fixed-dim": "#A0A0A0",
+                        "outline": "#4D4D4D",
+                        "inverse-on-surface": "#000000",
+                        "secondary-fixed": "#D4AF37",
+                        "background": "#000000", // Deeper black
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed": "#000000",
+                        "inverse-primary": "#D4AF37",
+                        "on-primary-fixed": "#000000",
+                        "surface-tint": "#D4AF37",
+                        "tertiary-fixed": "#D4AF37",
+                        "on-surface": "#E5E2E1",
+                        "on-tertiary-fixed": "#000000",
+                        "surface-container-low": "#080808",
+                        "surface": "#050505",
+                        "surface-container": "#0D0D0D",
+                        "surface-container-lowest": "#000000",
+                        "primary-fixed-dim": "#D4AF37",
+                        "primary-fixed": "#D4AF37",
+                        "surface-container-high": "#151515",
+                        "on-surface-variant": "#D4AF37",
+                        "on-secondary-fixed-variant": "#1A1A1A",
+                        "outline-variant": "#333333",
+                        "on-secondary-container": "#D4AF37",
+                        "secondary": "#A0A0A0",
+                        "surface-dim": "#050505",
+                        "surface-bright": "#1A1A1A",
+                        "on-tertiary": "#000000",
+                        "inverse-surface": "#E5E2E1",
+                        "on-primary-fixed-variant": "#D4AF37",
+                        "primary": "#D4AF37",
+                        "tertiary": "#D4AF37",
+                        "on-background": "#E5E2E1",
+                        "on-tertiary-fixed-variant": "#D4AF37",
+                        "surface-container-highest": "#1A1A1A",
+                        "error-container": "#93000a",
+                        "on-secondary": "#000000",
+                        "on-primary-container": "#000000",
+                        "error": "#ffb4ab",
+                        "on-error": "#690005",
+                        "tertiary-container": "#D4AF37",
+                        "surface-variant": "#1A1A1A"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "margin-desktop": "64px",
+                        "sm": "8px",
+                        "xl": "40px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "md": "16px",
+                        "margin-mobile": "16px"
+                    },
+                    fontFamily: {
+                        "body-lg": ["Hanken Grotesk"],
+                        "caption": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "display-lg-mobile": ["Hanken Grotesk"],
+                        "label-bold": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"]
+                    },
+                    animation: {
+                        'breathe': 'breathe 3s ease-in-out infinite',
+                        'data-stream': 'dataStream 2s linear infinite',
+                    },
+                    keyframes: {
+                        breathe: {
+                            '0%, 100%': { opacity: 0.5, transform: 'scale(0.95)' },
+                            '50%': { opacity: 1, transform: 'scale(1.05)' },
+                        },
+                        dataStream: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .liquid-glass {
+            background: rgba(5, 5, 5, 0.3);
+            backdrop-filter: blur(60px) saturate(120%);
+            -webkit-backdrop-filter: blur(60px) saturate(120%);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                0 20px 40px rgba(0, 0, 0, 0.8);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .liquid-glass:hover {
+            border-color: rgba(212, 175, 55, 0.15);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 30px 60px rgba(0, 0, 0, 0.9);
+            transform: translateY(-2px);
+        }
+        .text-glow {
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+        .bg-glow {
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            transition: all 0.3s ease;
+        }
+        .gold-border {
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .gold-glow-hover:hover {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+        /* Refined Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2); 
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.2); 
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 175, 55, 0.5); 
+        }
+        
+        /* Data stream effect container */
+        .data-stream-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .data-stream-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(212,175,55,0.8), transparent);
+            animation: dataStream 3s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .data-stream-container:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md h-screen overflow-hidden flex flex-col antialiased selection:bg-primary-container selection:text-black">
+<!-- TopNavBar (Shared Component) -->
+<header class="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-3xl border-b border-white/5 shadow-2xl flex justify-between items-center px-margin-desktop h-24 w-full transition-all duration-500">
+<div class="flex items-center gap-6">
+<img alt="Brand Logo" class="w-12 h-12 rounded-xl object-cover shadow-[0_0_20px_rgba(255,0,0,0.2)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-szjN_RFYPHo6BZSCMZc_fA6RkyE7dvToQxxtr3QbWc5n4lpN_Jld9HwB5g5ZTlHk4_37sguyKPM9Y8d8Ys5syX3fYJFpTqnuwYaYyB3Pe042M1A9dXMTCISs42t-wN2JXp7qNIu6xDobvcxhJXWVruzxHKClFQc5z4GNg2Ll2xmyCi2k725iOUGbeb0k4IstUCauoEAcyKfNteWCckhMSYkwwvFRZcWq-UxZj5NFYNwCwvUqWTFP5A6cmTlE_r1qzg"/>
+<h1 class="font-display-lg text-[36px] font-black tracking-widest text-[#FF0000] active:scale-95 transition-transform drop-shadow-[0_0_15px_rgba(255,0,0,0.4)] uppercase">STADION X</h1>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-secondary/70 hover:text-white font-body-md text-lg tracking-wider transition-all duration-300 px-4 py-2 rounded-xl hover:bg-white/5" href="#">Fan Portal</a>
+<a class="text-primary-container font-bold text-lg tracking-wider transition-all duration-300 px-4 py-2 rounded-xl bg-primary-container/10 shadow-[inset_0_1px_0_rgba(212,175,55,0.2)]" href="#">Mission Control</a>
+</nav>
+<div class="flex items-center gap-6 text-primary-container">
+<button class="hover:bg-primary-container/10 transition-colors duration-300 p-3 rounded-full active:scale-95 relative group">
+<span class="material-symbols-outlined text-[28px] group-hover:text-glow">notifications</span>
+<span class="absolute top-2 right-2 w-2.5 h-2.5 bg-[#FF0000] rounded-full animate-pulse shadow-[0_0_8px_#FF0000]"></span>
+</button>
+<button class="hover:bg-primary-container/10 transition-colors duration-300 p-3 rounded-full active:scale-95 group">
+<span class="material-symbols-outlined text-[28px] group-hover:rotate-45 transition-transform duration-500">settings</span>
+</button>
+<div class="relative group cursor-pointer ml-2">
+<div class="absolute inset-0 bg-primary-container rounded-full blur-md opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+<img alt="User profile" class="w-12 h-12 rounded-full border-2 border-primary-container/30 object-cover relative z-10 transition-transform duration-300 group-hover:scale-105" src="https://api.dicebear.com/7.x/initials/svg?seed=Admin&backgroundColor=000000&textColor=D4AF37"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-24 h-[calc(100vh-96px)] w-72 bg-black/40 backdrop-blur-xl border-r border-white/5 flex flex-col py-8 gap-4 z-40 transition-all duration-500 shadow-[20px_0_40px_rgba(0,0,0,0.5)]">
+<div class="px-8 mb-8">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-container/20 to-transparent flex items-center justify-center border border-primary-container/30 shadow-[0_0_20px_rgba(212,175,55,0.1)] relative overflow-hidden group">
+<div class="absolute inset-0 bg-primary-container/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
+<span class="material-symbols-outlined text-primary-container text-[28px] relative z-10">security</span>
+</div>
+<div>
+<h2 class="font-headline-md text-[20px] tracking-wide text-white drop-shadow-md">Mission Control</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-breathe shadow-[0_0_5px_#D4AF37]"></span>
+<p class="font-caption text-xs tracking-widest text-primary-container uppercase opacity-80">Active Ops</p>
+</div>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-3 px-4">
+<a class="flex items-center gap-4 bg-gradient-to-r from-primary-container/20 to-transparent text-primary-container rounded-2xl p-4 transition-all duration-300 font-label-bold text-[15px] border border-primary-container/30 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-hidden group data-stream-container" href="#">
+<div class="absolute inset-0 bg-primary-container/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<span class="material-symbols-outlined text-[24px] relative z-10 text-glow">layers</span>
+<span class="relative z-10 tracking-widest uppercase">Digital Twin</span>
+</a>
+<a class="flex items-center gap-4 text-secondary/70 p-4 hover:text-white hover:bg-white/5 transition-all duration-300 font-label-bold text-[15px] rounded-2xl group data-stream-container" href="#">
+<span class="material-symbols-outlined text-[24px] group-hover:text-primary-container transition-colors duration-300">psychology</span>
+<span class="tracking-widest uppercase">Intelligence</span>
+</a>
+<a class="flex items-center gap-4 text-secondary/70 p-4 hover:text-white hover:bg-white/5 transition-all duration-300 font-label-bold text-[15px] rounded-2xl group data-stream-container" href="#">
+<span class="material-symbols-outlined text-[24px] group-hover:text-primary-container transition-colors duration-300">emergency</span>
+<span class="tracking-widest uppercase">Incident Feeds</span>
+</a>
+<a class="flex items-center gap-4 text-secondary/70 p-4 hover:text-white hover:bg-white/5 transition-all duration-300 font-label-bold text-[15px] rounded-2xl group data-stream-container" href="#">
+<span class="material-symbols-outlined text-[24px] group-hover:text-primary-container transition-colors duration-300">monitoring</span>
+<span class="tracking-widest uppercase">Analytics</span>
+</a>
+</nav>
+<div class="px-6 mb-6 mt-auto">
+<button class="w-full bg-gradient-to-r from-[#FF0000] to-[#cc0000] text-white font-label-bold text-[15px] tracking-widest py-4 rounded-2xl hover:shadow-[0_0_25px_rgba(255,0,0,0.5)] transition-all duration-300 flex items-center justify-center gap-3 relative overflow-hidden group border border-[#FF0000]/50">
+<div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
+<span class="relative z-10 uppercase font-black">Deploy Response</span>
+</button>
+</div>
+<div class="mt-auto flex flex-col gap-2 pt-6 px-4 border-t border-white/5 mx-4">
+<a class="flex items-center gap-4 text-secondary/60 p-3 hover:text-white hover:bg-white/5 transition-all duration-300 font-label-bold text-[14px] rounded-xl" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-4 text-secondary/60 p-3 hover:text-white hover:bg-white/5 transition-all duration-300 font-label-bold text-[14px] rounded-xl" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+                Log Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-72 mt-24 p-8 h-[calc(100vh-96px)] overflow-y-auto relative bg-[#000000]">
+<!-- Background Ambient Glow -->
+<div class="fixed top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-primary-container rounded-full blur-[250px] opacity-[0.02] pointer-events-none -z-10"></div>
+<div class="fixed top-1/4 right-1/4 w-[800px] h-[800px] bg-[#FF0000] rounded-full blur-[200px] opacity-[0.01] pointer-events-none -z-10"></div>
+<div class="grid grid-cols-12 gap-8 h-full">
+<!-- Central Digital Twin Area (Spans 8 columns) -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-8 h-full">
+<!-- 3D Viewport Replacement -->
+<div class="liquid-glass rounded-[32px] flex-1 relative overflow-hidden flex flex-col group p-6">
+<div class="flex justify-between items-center mb-6 relative z-20">
+<h3 class="font-headline-md text-[20px] text-white tracking-widest uppercase">Tactical Overview</h3>
+<div class="flex gap-3">
+<span class="bg-black/80 backdrop-blur-md text-primary-container border border-primary-container/30 text-xs font-bold tracking-widest px-4 py-2 rounded-full flex items-center gap-2 shadow-[0_4px_15px_rgba(0,0,0,0.5)]">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-breathe shadow-[0_0_8px_#D4AF37]"></span> LIVE
+                            </span>
+<span class="bg-black/60 backdrop-blur-md text-white/90 text-xs font-semibold tracking-wider px-4 py-2 rounded-full border border-white/10">
+                                SECTOR 4 VIEW
+                            </span>
+</div>
+</div>
+<!-- High-fidelity realistic stadium image inset -->
+<div class="flex-1 rounded-[24px] overflow-hidden bg-black relative border border-white/5">
+<!-- Replaced dark wireframe with realistic lush image -->
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-[20s] ease-linear group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0UfT9ImsTADQ72WmU1RpIHenR-iBFz7_MbCr6stR9LcR8_3xvm0wzmrzWfr0aMIOmiZx-JZTyde19MKQRiG5fgy7_-Ol7Y-rNW-__oiZQ9rn-imRqPZ2R0LJcWfUgE7RWCqS-UDjGGElDP1Y_nxdyXR4wUfdQf14bB2LvEWKW65P9WQnWIm6cOgxq57nhaELGnlQnxeNOYO4xkBfUo4byJxJb3idXi3PRLsSCU670WpLsk1cX3XwP')">
+</div>
+<!-- Subtle dark vignette/overlay to keep UI readable but let colors pop -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40"></div>
+<!-- Retained UI overlay elements -->
+<div class="absolute top-[40%] left-[60%] -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-primary-container rounded-full animate-ping opacity-30"></div>
+<div class="absolute top-[40%] left-[60%] -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-primary-container rounded-full shadow-[0_0_20px_#D4AF37] border-2 border-black"></div>
+<!-- Additional tactical overlay elements -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-30" xmlns="http://www.w3.org/2000/svg">
+<circle class="animate-[spin_20s_linear_infinite]" cx="60%" cy="40%" fill="none" r="100" stroke="#D4AF37" stroke-dasharray="4 4" stroke-width="1"></circle>
+<circle cx="60%" cy="40%" fill="none" r="150" stroke="#D4AF37" stroke-dasharray="2 8" stroke-width="0.5"></circle>
+</svg>
+<!-- Overlay Controls -->
+<div class="absolute bottom-6 right-6 flex flex-col gap-3 z-20">
+<button class="w-12 h-12 bg-black/70 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center text-white hover:border-primary-container/50 hover:text-primary-container hover:shadow-[0_0_20px_rgba(212,175,55,0.2)] transition-all duration-300">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</button>
+<button class="w-12 h-12 bg-black/70 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center text-white hover:border-primary-container/50 hover:text-primary-container hover:shadow-[0_0_20px_rgba(212,175,55,0.2)] transition-all duration-300">
+<span class="material-symbols-outlined text-[24px]">remove</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Live Incident Feed -->
+<div class="liquid-glass rounded-[32px] h-56 p-6 flex flex-col relative overflow-hidden">
+<div class="absolute bottom-0 right-0 w-96 h-48 bg-primary-container blur-[120px] opacity-[0.04] pointer-events-none"></div>
+<div class="flex justify-between items-center mb-5 relative z-10">
+<h3 class="font-headline-md text-[22px] tracking-widest uppercase text-white flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container text-[28px] text-glow">rss_feed</span>
+                            Live Incident Feed
+                        </h3>
+<button class="text-sm font-semibold tracking-wide text-secondary/80 hover:text-primary-container flex items-center gap-2 transition-colors group">
+                            View All <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto pr-4 space-y-4 custom-scrollbar relative z-10">
+<!-- Feed Item 1 -->
+<div class="flex gap-5 items-start p-4 rounded-[20px] bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-primary-container/30 transition-all duration-300 group cursor-pointer">
+<div class="mt-1.5 w-2.5 h-2.5 rounded-full bg-[#FF0000] shadow-[0_0_10px_#FF0000] animate-breathe flex-shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-bold text-[15px] tracking-wide text-white group-hover:text-primary-container transition-colors">Crowd Surge Detected</span>
+<span class="text-xs font-medium text-secondary/60 tracking-wider">Just now</span>
+</div>
+<p class="text-[14px] text-secondary/80 leading-relaxed">North Concourse Gate B experiencing unexpected influx. Capacity at 94%.</p>
+</div>
+</div>
+<!-- Feed Item 2 -->
+<div class="flex gap-5 items-start p-4 rounded-[20px] bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-primary-container/30 transition-all duration-300 group cursor-pointer">
+<div class="mt-1.5 w-2.5 h-2.5 rounded-full bg-primary-container/60 shadow-[0_0_8px_rgba(212,175,55,0.4)] flex-shrink-0"></div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<span class="font-label-bold text-[15px] tracking-wide text-white group-hover:text-primary-container transition-colors">Maintenance Request</span>
+<span class="text-xs font-medium text-secondary/60 tracking-wider">2m ago</span>
+</div>
+<p class="text-[14px] text-secondary/80 leading-relaxed">HVAC system fluctuation in VIP Suite 402. Maintenance dispatched.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Sidebar Intelligence Panel (Spans 4 columns) -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-8 h-full">
+<div class="liquid-glass rounded-[32px] p-8 flex-1 flex flex-col relative overflow-hidden">
+<!-- Ambient Top highlight -->
+<div class="absolute top-0 left-1/4 right-1/4 h-[2px] bg-gradient-to-r from-transparent via-primary-container/40 to-transparent blur-[1px]"></div>
+<div class="flex items-center gap-4 mb-8 relative z-10">
+<div class="w-12 h-12 rounded-xl bg-primary-container/10 flex items-center justify-center border border-primary-container/20">
+<span class="material-symbols-outlined text-primary-container text-[28px] text-glow">psychology_alt</span>
+</div>
+<h2 class="font-display-lg-mobile text-[28px] font-black tracking-widest uppercase text-white drop-shadow-md">Intelligence</h2>
+</div>
+<!-- Critical Alert Card -->
+<div class="bg-gradient-to-br from-[#1a0505] to-black rounded-[24px] p-6 border border-[#FF0000]/30 relative overflow-hidden mb-8 group shadow-[0_10px_30px_rgba(255,0,0,0.1)]">
+<div class="absolute inset-0 bg-[#FF0000]/5 group-hover:bg-[#FF0000]/10 transition-colors duration-500"></div>
+<div class="absolute top-0 left-0 w-1.5 h-full bg-[#FF0000] shadow-[0_0_15px_#FF0000]"></div>
+<div class="flex items-center gap-3 mb-3 relative z-10">
+<span class="material-symbols-outlined text-[#FF0000] text-[22px] drop-shadow-[0_0_8px_rgba(255,0,0,0.8)] animate-pulse">warning</span>
+<span class="font-label-bold text-[#FF0000] tracking-widest uppercase text-xs font-black">Critical Alert</span>
+</div>
+<h4 class="font-headline-md text-[20px] text-white mb-3 relative z-10 font-bold leading-tight">Sector 4 Overcapacity Warning</h4>
+<p class="text-[14px] text-secondary/90 mb-6 relative z-10 leading-relaxed font-medium">Predictive models indicate high probability of crush hazard in next 15 minutes due to intersecting exit routes.</p>
+<div class="flex gap-3 relative z-10">
+<button class="bg-[#FF0000] text-white text-[14px] font-black tracking-widest py-3 px-4 rounded-xl hover:bg-[#cc0000] transition-colors duration-300 flex-1 text-center shadow-[0_0_20px_rgba(255,0,0,0.4)] hover:shadow-[0_0_30px_rgba(255,0,0,0.6)] uppercase">
+                                Reroute Flow
+                            </button>
+<button class="bg-black/50 backdrop-blur-sm border border-[#FF0000]/40 text-white hover:bg-[#FF0000]/10 text-[14px] font-bold py-3 px-4 rounded-xl transition-colors duration-300 flex-1 text-center uppercase tracking-widest">
+                                Details
+                            </button>
+</div>
+</div>
+<!-- Reasoning Panel -->
+<div class="flex-1 flex flex-col relative z-10">
+<h3 class="font-label-bold text-xs text-secondary/60 uppercase tracking-[0.2em] mb-6 flex items-center gap-4">
+<span>Analysis Breakdown</span>
+<div class="flex-1 h-[1px] bg-white/10"></div>
+</h3>
+<div class="space-y-6">
+<!-- Metric 1 -->
+<div class="group">
+<div class="flex justify-between text-[14px] font-semibold mb-2">
+<span class="text-white/90 tracking-wide">Density Heatmap</span>
+<span class="text-[#FF0000] font-black drop-shadow-[0_0_8px_rgba(255,0,0,0.5)]">94%</span>
+</div>
+<div class="h-2 bg-black/60 rounded-full overflow-hidden border border-white/5 shadow-[inset_0_1px_3px_rgba(0,0,0,0.8)]">
+<div class="h-full bg-gradient-to-r from-primary-container to-[#FF0000] w-[94%] shadow-[0_0_15px_#FF0000] relative rounded-full">
+<div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+</div>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="group">
+<div class="flex justify-between text-[14px] font-semibold mb-2">
+<span class="text-white/90 tracking-wide">Flow Rate</span>
+<span class="text-primary-container font-black drop-shadow-[0_0_8px_rgba(212,175,55,0.4)]">78%</span>
+</div>
+<div class="h-2 bg-black/60 rounded-full overflow-hidden border border-white/5 shadow-[inset_0_1px_3px_rgba(0,0,0,0.8)]">
+<div class="h-full bg-primary-container/80 w-[78%] rounded-full relative">
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+</div>
+</div>
+</div>
+<!-- Insight -->
+<div class="mt-8 p-5 bg-gradient-to-br from-primary-container/[0.05] to-transparent border border-primary-container/20 rounded-[24px] relative overflow-hidden group hover:border-primary-container/40 transition-colors duration-500">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container blur-[60px] opacity-10 group-hover:opacity-20 transition-opacity duration-500"></div>
+<div class="flex items-start gap-4 relative z-10">
+<div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center flex-shrink-0 border border-primary-container/30">
+<span class="material-symbols-outlined text-primary-container text-[18px]">verified</span>
+</div>
+<p class="text-[14px] text-secondary/90 leading-relaxed font-medium">
+<span class="text-primary-container font-bold tracking-widest uppercase block mb-1">Recommendation:</span> 
+                                        Deploy temporary stanchions at Gate B and open secondary egress via Corridor 7 to reduce density by an estimated 35%.
+                                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Custom Toast Container -->
+<div id="toast-container" class="fixed top-8 right-8 z-50 flex flex-col gap-4"></div>
+
+<script>
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `p-4 rounded-xl backdrop-blur-xl border flex items-center gap-3 transform translate-x-full transition-transform duration-300 shadow-2xl ${
+            type === 'error' ? 'bg-[#FF0000]/20 border-[#FF0000]/50 text-white' : 'bg-primary-container/20 border-primary-container/50 text-white'
+        }`;
+        
+        toast.innerHTML = `
+            <span class="material-symbols-outlined">${type === 'error' ? 'warning' : 'info'}</span>
+            <span class="font-label-bold tracking-widest text-sm uppercase">${message}</span>
+        `;
+        
+        container.appendChild(toast);
+        
+        // Trigger animation
+        setTimeout(() => toast.style.transform = 'translateX(0)', 10);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.style.transform = 'translateX(120%)';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // Attach to buttons
+    document.addEventListener('DOMContentLoaded', () => {
+        const deployBtn = document.querySelector('button:has(.uppercase.font-black)');
+        if (deployBtn) {
+            deployBtn.addEventListener('click', () => {
+                showToast('Response Team Deployed to Sector 4', 'info');
+            });
+        }
+        
+        const rerouteBtn = document.querySelector('button.bg-\\[\\#FF0000\\]');
+        if (rerouteBtn) {
+            rerouteBtn.addEventListener('click', () => {
+                showToast('Crowd Rerouting Protocol Initiated', 'error');
+                rerouteBtn.innerHTML = 'Rerouting...';
+                rerouteBtn.classList.add('opacity-50');
+            });
+        }
+    });
+</script>
+</body></html>
