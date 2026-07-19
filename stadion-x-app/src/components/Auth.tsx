@@ -3,7 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { supabase } from '../lib/supabase';
 
-const TerminalBoot = () => {
+import { z } from 'zod';
+
+const authSchema = z.object({
+  email: z.string().email("Invalid email format."),
+  password: z.string().min(6, "Password must be at least 6 characters."),
+});
+
+const TerminalBoot = React.memo(() => {
   const [lines, setLines] = useState<string[]>([]);
   useEffect(() => {
     const bootSequence = [
@@ -33,7 +40,7 @@ const TerminalBoot = () => {
       <div className="animate-pulse mt-1">{`> _`}</div>
     </div>
   );
-};
+});
 
 export const Auth: React.FC = () => {
   const navigate = useNavigate();
@@ -42,20 +49,27 @@ export const Auth: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleManualSignIn = async (e: React.FormEvent) => {
+  const handleManualSignIn = React.useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       if (!email || !password) {
         setError('Please enter both email and password.');
         return;
       }
+
+      // Input validation using Zod
+      const validationResult = authSchema.safeParse({ email, password });
+      if (!validationResult.success) {
+        setError(validationResult.error.errors[0].message);
+        return;
+      }
       
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) {
+      if (signInError) {
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
@@ -102,9 +116,9 @@ export const Auth: React.FC = () => {
       });
       navigate('/role-selection');
     }
-  };
+  }, [email, password, navigate, setUser]);
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = React.useCallback(async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -122,7 +136,7 @@ export const Auth: React.FC = () => {
       });
       navigate('/role-selection');
     }
-  };
+  }, [navigate, setUser]);
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black p-4 sm:p-8">
@@ -167,39 +181,44 @@ export const Auth: React.FC = () => {
           <form onSubmit={handleManualSignIn} className="w-full text-left space-y-5">
             
             <div className="space-y-1.5 group">
-              <label className="flex items-center gap-2 text-white/60 font-semibold text-xs tracking-wide">
+              <label htmlFor="email-input" className="flex items-center gap-2 text-white/60 font-semibold text-xs tracking-wide">
                 Email
               </label>
               <div className="relative">
                 <input 
+                  id="email-input"
                   type="text" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
+                  aria-label="Email address"
                   className="w-full bg-black/20 border border-white/10 rounded-2xl text-white placeholder-white/30 px-5 py-4 focus:outline-none focus:border-white/30 focus:bg-black/40 transition-all text-sm backdrop-blur-md"
                 />
               </div>
             </div>
 
             <div className="space-y-1.5 group">
-              <label className="flex items-center gap-2 text-white/60 font-semibold text-xs tracking-wide">
+              <label htmlFor="password-input" className="flex items-center gap-2 text-white/60 font-semibold text-xs tracking-wide">
                 Password
               </label>
               <div className="relative">
                 <input 
+                  id="password-input"
                   type="password" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
+                  aria-label="Password"
                   className="w-full bg-black/20 border border-white/10 rounded-2xl text-white placeholder-white/30 px-5 py-4 focus:outline-none focus:border-white/30 focus:bg-black/40 transition-all text-sm tracking-widest backdrop-blur-md"
                 />
               </div>
             </div>
 
-            {error && <p className="text-red-400 text-xs mt-2 text-center font-medium bg-red-400/10 p-2 rounded-lg">{error}</p>}
+            {error && <p role="alert" className="text-red-400 text-xs mt-2 text-center font-medium bg-red-400/10 p-2 rounded-lg">{error}</p>}
 
             <button 
               type="submit"
+              aria-label="Sign in with email and password"
               className="w-full bg-white hover:bg-gray-100 text-black font-semibold text-sm py-4 rounded-2xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] mt-8 shadow-xl"
             >
               Sign In
@@ -218,9 +237,10 @@ export const Auth: React.FC = () => {
           <button 
             onClick={handleGoogleSignIn}
             type="button"
+            aria-label="Sign in with Google"
             className="w-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-white font-medium text-sm py-4 rounded-2xl flex items-center justify-center gap-3 transition-transform hover:scale-[1.02]"
           >
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" alt="Google" />
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" alt="Google Logo" />
             Google
           </button>
         </div>

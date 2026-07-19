@@ -1,5 +1,8 @@
-// ARC AI Engine - Advanced Simulated Streaming Engine
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useStadionStore } from '../store/useStadionStore';
+
+// Initialize Gemini SDK (if key exists)
+const genAI = import.meta.env.VITE_GEMINI_API_KEY ? new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY) : null;
 
 export const aiService = {
   getSuggestedPrompts: (role: string | undefined, currentPath: string) => {
@@ -16,7 +19,7 @@ export const aiService = {
     }
   },
 
-  // Generates the full response string based on robust fuzzy matching
+  // Fallback / Hardcoded logic
   _generateResponse: (query: string, role: string | undefined): string => {
     const q = query.toLowerCase();
     
@@ -80,6 +83,25 @@ export const aiService = {
     return "I'm a state-of-the-art AI, but I have no idea what you just said. Try asking me to upgrade your seat, order a burger, or find the bathroom.";
   },
 
+  // Generative AI response with Gemini
+  _generateGeminiResponse: async (query: string, role: string | undefined): Promise<string> => {
+    try {
+      if (!genAI) throw new Error("Gemini API key not found, using fallback");
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      
+      const systemPrompt = role === 'employee' 
+        ? "You are ARC Tactical AI for stadium employees. Provide precise, operational, and professional answers regarding stadium security, analytics, and status."
+        : "You are ARC Assistant for stadium fans. Provide helpful, slightly humorous, and highly advanced-sounding answers about wayfinding, food, and ticketing.";
+      
+      const result = await model.generateContent(`${systemPrompt}\n\nUser: ${query}\nARC:`);
+      const response = await result.response;
+      return response.text();
+    } catch (error) {
+      console.warn("Gemini API failed, falling back to local engine:", error);
+      return aiService._generateResponse(query, role);
+    }
+  },
+
   // Simulated Streaming Engine
   streamARC: async (
     query: string, 
@@ -87,12 +109,7 @@ export const aiService = {
     onProgress: (text: string) => void
   ): Promise<string> => {
     
-    // Simulate network latency (thinking...)
-    await new Promise(resolve => setTimeout(resolve, 600));
-    
-    const fullResponse = aiService._generateResponse(query, role);
-    
-    // Side effects logic for the smart assistant!
+    // Check if we should execute side-effects (e.g. placing an order)
     if (role !== 'employee') {
       const q = query.toLowerCase();
       if (q.includes('upgrade')) {
@@ -117,10 +134,13 @@ export const aiService = {
         useStadionStore.getState().addNotification("Order added to active tracking.", 'success');
       }
     }
+
+    // Generate Response (Real Gemini or Fallback)
+    const fullResponse = genAI 
+      ? await aiService._generateGeminiResponse(query, role)
+      : aiService._generateResponse(query, role);
     
     let currentText = "";
-    
-    // Split into words for a more natural LLM streaming feel
     const words = fullResponse.split(" ");
     
     for (let i = 0; i < words.length; i++) {

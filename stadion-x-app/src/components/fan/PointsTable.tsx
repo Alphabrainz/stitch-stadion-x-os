@@ -34,7 +34,7 @@ export const PointsTable: React.FC = () => {
                     <div className="flex items-center gap-4">
                       {/* Using placehold.co for generic flag styling fallback */}
                       <div className="w-10 h-10 rounded-full overflow-hidden border border-white/20 shadow-lg">
-                        <img src={`https://flagcdn.com/w80/${team.flag}.png`} alt={team.country} className="w-full h-full object-cover" />
+                        <img src={`https://flagcdn.com/w80/${team.flag}.png`} alt={team.country} loading="lazy" className="w-full h-full object-cover" />
                       </div>
                       <div>
                         <p className="font-black text-xl text-white uppercase tracking-wider">{team.code}</p>

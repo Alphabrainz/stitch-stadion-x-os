@@ -17,7 +17,7 @@ export const RoleSelection: React.FC = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const handleRoleSelect = async (role: Role) => {
+  const handleRoleSelect = React.useCallback(async (role: Role) => {
     if (!user) return;
     
     setIsSaving(true);
@@ -43,10 +43,10 @@ export const RoleSelection: React.FC = () => {
     } finally {
       setIsSaving(false);
     }
-  };
+  }, [user, navigate, setRole]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 sm:p-8 relative overflow-hidden animate-fade-in-up z-10 selection:bg-white/20">
+    <main className="min-h-screen flex items-center justify-center p-4 sm:p-8 relative overflow-hidden animate-fade-in-up z-10 selection:bg-white/20">
       
       {/* Dynamic Cursor Gradient */}
       <div 
@@ -72,6 +72,7 @@ export const RoleSelection: React.FC = () => {
           <button 
             onClick={() => handleRoleSelect('fan')}
             disabled={isSaving}
+            aria-label="Select Fan Role"
             className="group liquid-glass p-8 sm:p-10 rounded-[2rem] flex flex-col items-center sm:items-start text-center sm:text-left gap-6 transition-all duration-500 active:scale-95 disabled:opacity-50 relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none"></div>
@@ -90,6 +91,7 @@ export const RoleSelection: React.FC = () => {
           <button 
             onClick={() => handleRoleSelect('employee')}
             disabled={isSaving}
+            aria-label="Select Employee Role"
             className="group liquid-glass p-8 sm:p-10 rounded-[2rem] flex flex-col items-center sm:items-start text-center sm:text-left gap-6 transition-all duration-500 active:scale-95 disabled:opacity-50 relative overflow-hidden"
           >
              <div className="absolute inset-0 bg-gradient-to-br from-brand-red/[0.02] to-transparent pointer-events-none"></div>
@@ -105,6 +107,6 @@ export const RoleSelection: React.FC = () => {
           </button>
         </div>
       </div>
-    </div>
+    </main>
   );
 };

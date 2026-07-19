@@ -31,7 +31,7 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children }) => {
       <BottomDock />
 
       {/* Global Notifications Panel (Bi-directional) */}
-      <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[150] flex flex-col gap-2 pointer-events-none w-full max-w-sm px-4">
+      <div role="status" aria-live="polite" className="fixed top-24 left-1/2 -translate-x-1/2 z-[150] flex flex-col gap-2 pointer-events-none w-full max-w-sm px-4">
         {useStadionStore(state => state.notifications).map(notif => (
           <div key={notif.id} className="pointer-events-auto bg-black/80 backdrop-blur-md border border-white/20 p-4 rounded-xl shadow-2xl animate-in slide-in-from-top-4 duration-300 flex items-start gap-3">
             <span className={`material-symbols-outlined mt-0.5
@@ -47,9 +47,10 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children }) => {
             </div>
             <button 
               onClick={() => useStadionStore.getState().removeNotification(notif.id)}
+              aria-label="Close notification"
               className="text-white/50 hover:text-white transition-colors"
             >
-              <span className="material-symbols-outlined text-[18px]">close</span>
+              <span aria-hidden="true" className="material-symbols-outlined text-[18px]">close</span>
             </button>
           </div>
         ))}
@@ -57,7 +58,7 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children }) => {
 
       {/* Global Lockdown Takeover for Fans */}
       {lockdownMode && !isEmployee && (
-        <div className="fixed inset-0 z-[999] bg-brand-red flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-300">
+        <div role="alert" aria-live="assertive" className="fixed inset-0 z-[999] bg-brand-red flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-300">
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550684376-efcbd6e3f031?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center mix-blend-multiply opacity-20"></div>
           <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
           

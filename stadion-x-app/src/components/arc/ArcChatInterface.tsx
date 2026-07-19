@@ -152,6 +152,7 @@ export const ArcChatInterface: React.FC = () => {
       {/* Floating Launcher Button */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close ARC Chat" : "Open ARC Chat"}
         className={`fixed bottom-[110px] md:bottom-8 right-4 md:right-8 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-all z-50 group shadow-[0_10px_40px_rgba(0,0,0,0.8)] border border-white/20 overflow-hidden ${
           isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
         }`}
@@ -189,14 +190,14 @@ export const ArcChatInterface: React.FC = () => {
             </div>
             
             <div className="flex items-center gap-1">
-              <button onClick={clearChat} className="p-2 text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/10" title="Reset Chat">
+              <button onClick={clearChat} aria-label="Reset Chat" className="p-2 text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/10" title="Reset Chat">
                 <span className="material-symbols-outlined text-[20px]">refresh</span>
               </button>
-              <button onClick={() => setIsOpen(false)} className="p-2 text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/10 hidden md:block">
+              <button onClick={() => setIsOpen(false)} aria-label="Minimize Chat" className="p-2 text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/10 hidden md:block">
                 <span className="material-symbols-outlined text-[24px]">expand_more</span>
               </button>
               {/* Mobile close button */}
-              <button onClick={() => setIsOpen(false)} className="p-2 text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/10 md:hidden">
+              <button onClick={() => setIsOpen(false)} aria-label="Close Chat" className="p-2 text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/10 md:hidden">
                 <span className="material-symbols-outlined text-[24px]">close</span>
               </button>
             </div>
@@ -311,6 +312,7 @@ export const ArcChatInterface: React.FC = () => {
               <div className="absolute right-2 flex gap-1 items-center">
                 <button 
                   type="button" 
+                  aria-label="Speak to ARC"
                   onClick={startListening}
                   disabled={isTyping || isListening}
                   className={`w-8 h-8 flex items-center justify-center rounded-xl transition-all ${
@@ -322,6 +324,7 @@ export const ArcChatInterface: React.FC = () => {
                 </button>
                 <button 
                   type="submit" 
+                  aria-label="Send Message"
                   disabled={!input.trim() || isTyping}
                   className={`w-8 h-8 flex items-center justify-center rounded-xl transition-all ${
                     input.trim() && !isTyping ? `${themeBg} text-black hover:scale-105 shadow-lg` : 'bg-white/5 text-white/30 cursor-not-allowed'
