@@ -15,7 +15,6 @@ import { InteractiveMap } from './components/fan/InteractiveMap';
 import { FoodOrdering } from './components/fan/FoodOrdering';
 import { PointsTable } from './components/fan/PointsTable';
 import { AuthProvider } from './components/AuthProvider';
-import { supabase } from './lib/supabase';
 // Ops Components
 import { OpsDashboard } from './components/ops/OpsDashboard';
 import { IncidentFeeds } from './components/ops/IncidentFeeds';
