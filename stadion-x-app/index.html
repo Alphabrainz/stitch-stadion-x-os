@@ -10,14 +10,45 @@
     <!-- Preload critical background image -->
     <link rel="preload" href="/stadium-bg.png" as="image" />
 
-    <!-- Apple-style Typography (Inter) & Material Symbols -->
+    <!-- Preload Material Symbols font to prevent FOUT (flash of raw icon text) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet" />
+
+    <style>
+      /* Hide icon text until Material Symbols font is fully loaded to prevent showing raw text */
+      .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-smoothing: antialiased;
+        visibility: hidden;
+      }
+      /* Show icons once the font is loaded */
+      .fonts-loaded .material-symbols-outlined {
+        visibility: visible;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Mark fonts as loaded once Material Symbols is ready
+      document.fonts.ready.then(() => {
+        document.body.classList.add('fonts-loaded');
+      });
+      // Fallback: show icons after 2s even if font check fails
+      setTimeout(() => document.body.classList.add('fonts-loaded'), 2000);
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
