@@ -16,7 +16,7 @@ describe('useAuthStore', () => {
     const mockUser = {
       uid: '123',
       displayName: 'Test User',
-      email: 'test@example.com',
+      email: 'test@stadion-x.com',
       photoURL: null,
       role: null
     };
@@ -32,7 +32,7 @@ describe('useAuthStore', () => {
     const mockUser = {
       uid: '123',
       displayName: 'Test User',
-      email: 'test@example.com',
+      email: 'test@stadion-x.com',
       photoURL: null,
       role: null
     };
@@ -55,7 +55,7 @@ describe('useAuthStore', () => {
     const mockUser = {
       uid: '123',
       displayName: 'Test User',
-      email: 'test@example.com',
+      email: 'test@stadion-x.com',
       photoURL: null,
       role: null
     };

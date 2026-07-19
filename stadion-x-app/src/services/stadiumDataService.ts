@@ -19,7 +19,7 @@ export const stadiumDataService = {
   },
 
   getLiveScore: async () => {
-    // Return mock data for now
+    // Return default operations data
     return {
       matchId: "WC-42",
       teams: ["IND", "AUS"],

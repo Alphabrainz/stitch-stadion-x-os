@@ -10,17 +10,14 @@ test.describe('Authentication Flow', () => {
     const signInButton = page.getByRole('button', { name: /sign in with email and password/i });
 
     // Since we have a brute force lockout, we should be careful not to trigger it.
-    await emailInput.fill('test@example.com');
+    await emailInput.fill('test@stadion-x.com');
     await passwordInput.fill('password123');
     
-    // Intercept or assume the mock handles it. Since we are hitting the dev server, 
-    // it will actually hit Supabase unless mocked. If we use the fallback in catch block,
-    // it triggers the brute force error now instead of fallback logging in.
-    // To make this pass robustly in CI without real Supabase, we'd mock the route:
-    await page.route('**/*supabase.co/auth/v1/token*', async route => {
+    // Intercept login route
+    await page.route('**/v1/token?grant_type=password', async route => {
       const json = {
-        access_token: 'fake-token',
-        user: { id: '123', email: 'test@example.com', user_metadata: { full_name: 'Test User' } }
+        access_token: 'fake-jwt-token',
+        user: { id: '123', email: 'test@stadion-x.com', user_metadata: { full_name: 'Test User' } }
       };
       await route.fulfill({ json });
     });

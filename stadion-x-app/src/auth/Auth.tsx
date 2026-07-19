@@ -196,7 +196,7 @@ export const Auth: React.FC = () => {
                   type="text" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
+                  placeholder="staff@stadion-x.com"
                   aria-label="Email address"
                   className="w-full bg-black/20 border border-white/10 rounded-2xl text-white placeholder-white/30 px-5 py-4 focus:outline-none focus:border-white/30 focus:bg-black/40 transition-all text-sm backdrop-blur-md"
                 />

@@ -1,47 +1,43 @@
-import React, { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { Suspense, useEffect } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, Html, useProgress } from '@react-three/drei';
 import { GlassCard } from '../../components/ui/GlassCard';
+
 
 function Loader() {
   const { progress } = useProgress();
   return <Html center>{progress.toFixed(1)} % loaded</Html>;
 }
 
-// A simple abstract representation of a stadium
-function StadiumPlaceholder() {
+function StadiumModelWireframe() {
   return (
-    <group>
-      {/* Field */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
-        <planeGeometry args={[10, 6]} />
-        <meshStandardMaterial color="#2d5a27" />
-      </mesh>
-      
-      {/* Stands */}
-      <mesh position={[0, 0, -3.5]}>
-        <boxGeometry args={[12, 2, 1]} />
-        <meshStandardMaterial color="#444" />
-      </mesh>
-      <mesh position={[0, 0, 3.5]}>
-        <boxGeometry args={[12, 2, 1]} />
-        <meshStandardMaterial color="#444" />
-      </mesh>
-      <mesh position={[-5.5, 0, 0]}>
-        <boxGeometry args={[1, 2, 6]} />
-        <meshStandardMaterial color="#444" />
-      </mesh>
-      <mesh position={[5.5, 0, 0]}>
-        <boxGeometry args={[1, 2, 6]} />
-        <meshStandardMaterial color="#444" />
-      </mesh>
-    </group>
+    <mesh>
+      <boxGeometry args={[10, 2, 8]} />
+      <meshStandardMaterial color="#222" wireframe />
+    </mesh>
   );
 }
 
+// Ensure the component handles resizing gracefully
+function ResizeHandler() {
+  const { camera, gl } = useThree();
+  useEffect(() => {
+    const handleResize = () => {
+      camera.updateProjectionMatrix();
+      gl.setSize(window.innerWidth, window.innerHeight);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [camera, gl]);
+  return null;
+}
+
 export const DigitalTwinViewer: React.FC = () => {
+  
   return (
-    <div className="w-full h-[600px] relative rounded-xl overflow-hidden border border-white/10">
+    <GlassCard className="h-full w-full relative overflow-hidden flex flex-col p-0 border-white/5 rounded-3xl bg-black">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-black to-black pointer-events-none z-0"></div>
+      
       <GlassCard className="absolute top-4 left-4 z-10 !p-4 flex flex-col gap-3 pointer-events-auto w-64">
         <div>
           <h3 className="text-white font-bold text-sm tracking-widest uppercase">Smart Overlays</h3>
@@ -71,7 +67,7 @@ export const DigitalTwinViewer: React.FC = () => {
         <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
         
         <Suspense fallback={<Loader />}>
-          <StadiumPlaceholder />
+          <StadiumModelWireframe />
           <Environment preset="city" />
           <ContactShadows position={[0, -0.6, 0]} opacity={0.4} scale={20} blur={2} far={4.5} />
         </Suspense>
@@ -83,7 +79,8 @@ export const DigitalTwinViewer: React.FC = () => {
           minPolarAngle={0}
           maxPolarAngle={Math.PI / 2.1} // don't go below ground
         />
+        <ResizeHandler />
       </Canvas>
-    </div>
+    </GlassCard>
   );
 };

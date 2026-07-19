@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Auth } from '../../auth/Auth';
 import { BrowserRouter } from 'react-router-dom';
@@ -39,31 +39,28 @@ describe('Auth Component', () => {
   it('renders sign in form properly', () => {
     renderAuth();
     expect(screen.getByRole('heading', { name: 'Sign In' })).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('name@example.com')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('staff@stadion-x.com')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('••••••••')).toBeInTheDocument();
   });
 
   it('shows error when email or password is empty on submit', async () => {
     renderAuth();
-    
-    const signInButton = screen.getByRole('button', { name: 'Sign in with email and password' });
-    fireEvent.click(signInButton);
-    
-    await waitFor(() => {
-      expect(screen.getByText('Please enter both email and password.')).toBeInTheDocument();
-    });
+    const submitBtn = screen.getByRole('button', { name: 'Sign in with email and password' });
+    fireEvent.click(submitBtn);
+
+    expect(await screen.findByText('Please enter both email and password.')).toBeInTheDocument();
   });
 
   it('allows user to type into inputs', () => {
     renderAuth();
     
-    const emailInput = screen.getByPlaceholderText('name@example.com') as HTMLInputElement;
+    const emailInput = screen.getByPlaceholderText('staff@stadion-x.com') as HTMLInputElement;
     const passwordInput = screen.getByPlaceholderText('••••••••') as HTMLInputElement;
     
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(emailInput, { target: { value: 'test@stadion-x.com' } });
     fireEvent.change(passwordInput, { target: { value: 'password123' } });
     
-    expect(emailInput.value).toBe('test@example.com');
+    expect(emailInput.value).toBe('test@stadion-x.com');
     expect(passwordInput.value).toBe('password123');
   });
 });

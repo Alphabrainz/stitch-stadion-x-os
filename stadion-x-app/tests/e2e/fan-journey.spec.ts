@@ -33,7 +33,7 @@ test.describe('Fan Journey', () => {
     await page.getByText('Navigation Map').click();
     await expect(page).toHaveURL(/.*fan\/map/);
     
-    // Should see Map placeholder
+    // Should see Map view
     await expect(page.getByText(/Interactive Map/i)).toBeVisible();
   });
 });
