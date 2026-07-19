@@ -28,7 +28,7 @@ export const useSpeechRecognition = ({ onResult }: UseSpeechRecognitionProps) =>
         onResult(transcript);
       };
 
-      recognition.onerror = (event: Event & { error?: any }) => {
+      recognition.onerror = (event: Event & { error?: unknown }) => {
         console.error("Speech recognition error", event.error);
         setIsListening(false);
       };
