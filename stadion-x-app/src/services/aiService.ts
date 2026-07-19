@@ -7,9 +7,9 @@ const genAI = import.meta.env.VITE_GEMINI_API_KEY ? new GoogleGenerativeAI(impor
 export const aiService = {
   getSuggestedPrompts: (role: string | undefined, currentPath: string) => {
     if (role === 'employee') {
-      if (currentPath.includes('/incidents')) return ["Filter active incidents", "Deploy Alpha Team", "Escalate to Police", "Show high-risk zones"];
-      if (currentPath.includes('/analytics')) return ["Predict exit bottlenecks", "Concession restock needed?", "Show attendance drop-off"];
-      return ["Status Report", "Show Crowd Density", "System Diagnostics", "Summarize current alerts"];
+      if (currentPath.includes('/incidents')) return ["Summarize active incidents", "Recommend evacuation routes", "Detect operational anomalies"];
+      if (currentPath.includes('/analytics')) return ["Predict crowd congestion", "Predict queue lengths", "Recommend parking allocation"];
+      return ["Recommend gate openings", "Suggest staff deployment", "System Diagnostics"];
     } else {
       if (currentPath.includes('/tickets')) return ["Upgrade my seat!", "Where is my gate?", "Transfer ticket", "Cancel ticket"];
       if (currentPath.includes('/food')) return ["Find Washroom", "Find Exit", "Order me a burger", "What food is nearby?"];
@@ -24,19 +24,31 @@ export const aiService = {
     const q = query.toLowerCase();
     
     if (role === 'employee') {
-      if (q.includes('status') || q.includes('density') || q.includes('report')) {
-        return "Sector 204 is currently operating at 95% capacity. Minor congestion detected at Gate 3. All other sectors are nominal. No critical incidents active.";
+      if (q.includes('congestion') || q.includes('crowd') || q.includes('density')) {
+        return "Input Data: Live optical sensors (Sector 204), Historical flow data.\nAnalysis: 40% surge detected approaching Gate 3.\nRecommendation: Re-route VIP traffic to Gate 4 and dispatch 4 queue-management staff.\nConfidence Score: 94%\nExpected Operational Benefit: Reduces average entry time by 12 mins.";
       }
-      if (q.includes('incident') || q.includes('deploy') || q.includes('alpha') || q.includes('security')) {
-        return "Security Team Alpha deployed to Sector 204. ETA 2 minutes. I have locked the adjacent turnstiles to prevent further crowding. Local camera feeds have been pinned to your dashboard.";
+      if (q.includes('gate') || q.includes('open')) {
+        return "Input Data: Ticket scan rate, Exterior crowd massing.\nAnalysis: Gate B4 is currently operating at 110% capacity while Gate B5 is at 30%.\nRecommendation: Open 2 additional turnstiles at Gate B5 and activate digital signage wayfinding.\nConfidence Score: 88%\nExpected Operational Benefit: Balances load, preventing bottleneck cascade.";
       }
-      if (q.includes('predict') || q.includes('analytics') || q.includes('bottleneck')) {
-        return "Predictive model indicates a 40% surge at the South Concessions in 10 minutes due to the halftime whistle. Recommending proactive staff reallocation from North side.";
+      if (q.includes('staff') || q.includes('deploy')) {
+        return "Input Data: Roster availability, Incident heatmaps.\nAnalysis: Medical anomaly detected in Sector 110 with zero staff proximity.\nRecommendation: Suggest immediate deployment of Medical Team Bravo to Sector 110.\nConfidence Score: 97%\nExpected Operational Benefit: Decreases incident resolution time by 5 minutes.";
       }
-      if (q.includes('police') || q.includes('escalate')) {
-        return "WARNING: Initiating escalation protocol to local law enforcement. Please confirm authorization code on your secondary device to finalize dispatch.";
+      if (q.includes('anomal') || q.includes('detect')) {
+        return "Input Data: Acoustic sensors, Concession POS velocity.\nAnalysis: Abnormal acoustic spike (95dB) detected near North Food Court alongside a 0% transaction rate.\nRecommendation: Dispatch Security Team Alpha to investigate potential altercation.\nConfidence Score: 91%\nExpected Operational Benefit: Preempts escalation and secures fan safety.";
       }
-      return "Acknowledged. Logging query to Mission Control. My predictive models are running in the background.";
+      if (q.includes('queue') || q.includes('length')) {
+        return "Input Data: Washroom zone sensors, Halftime proximity.\nAnalysis: Halftime approaches in 4 minutes. Queue lengths at East Washrooms will exceed 15 minutes.\nRecommendation: Broadcast push notification to East sector fans recommending West Washrooms.\nConfidence Score: 96%\nExpected Operational Benefit: Improves fan satisfaction and distributes load.";
+      }
+      if (q.includes('parking') || q.includes('allocat')) {
+        return "Input Data: ANPR cameras, Pre-booked parking data.\nAnalysis: East VIP Garage filling 20% faster than predicted.\nRecommendation: Divert incoming premium vehicles to North Annex and activate shuttle service.\nConfidence Score: 92%\nExpected Operational Benefit: Prevents gridlock on main arterial approach road.";
+      }
+      if (q.includes('incident') || q.includes('summar')) {
+        return "Input Data: Live incident logs, Security radio transcription.\nAnalysis: 3 active incidents. 2 minor medical, 1 unauthorized access.\nRecommendation: Escalate unauthorized access to Tier 2 and maintain current medical response.\nConfidence Score: 89%\nExpected Operational Benefit: Optimizes resource allocation without compromising safety.";
+      }
+      if (q.includes('evacuat') || q.includes('route')) {
+        return "Input Data: Structural integrity sensors, Wind direction, Fire alarm status.\nAnalysis: Simulated fire event in South Stand requires immediate clearing.\nRecommendation: Initiate Protocol Epsilon. Route South Stand to Exits 4, 5, and 6. Block internal concourse access.\nConfidence Score: 99%\nExpected Operational Benefit: Ensures safe clearing within 4.5 minute target window.";
+      }
+      return "Input Data: Unrecognized query string.\nAnalysis: The query does not match primary Smart Stadium Operations scenarios.\nRecommendation: Please ask about crowd congestion, gate openings, staff deployment, anomalies, queue lengths, parking allocation, incident summaries, or evacuation routes.\nConfidence Score: 100%\nExpected Operational Benefit: Aligns user with optimal AI capabilities.";
     }
 
     // ARC Wayfinding & Fan Logic - Humorous & Ultra Pro
@@ -90,8 +102,8 @@ export const aiService = {
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
       
       const systemPrompt = role === 'employee' 
-        ? "You are ARC Tactical AI for stadium employees. Provide precise, operational, and professional answers regarding stadium security, analytics, and status."
-        : "You are ARC Assistant for stadium fans. Provide helpful, slightly humorous, and highly advanced-sounding answers about wayfinding, food, and ticketing.";
+        ? "You are ARC Tactical AI for Smart Stadium Operations. You MUST format EVERY response with exactly these 5 headings: 'Input Data:', 'Analysis:', 'Recommendation:', 'Confidence Score:', 'Expected Operational Benefit:'. Provide highly specific, realistic stadium terminology for predictive crowd congestion, gate openings, staff deployment, anomalies, queue lengths, parking, incidents, and evacuations."
+        : "You are ARC Assistant for stadium fans. Provide helpful, slightly humorous, and highly advanced-sounding answers about Smart Ticket Management, Interactive Seat Finder, Indoor Navigation, Match Center, Parking, Food, and Emergency Help.";
       
       const result = await model.generateContent(`${systemPrompt}\n\nUser: ${query}\nARC:`);
       const response = await result.response;

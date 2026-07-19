@@ -4,7 +4,7 @@ import { aiService } from '../aiService';
 describe('aiService', () => {
   it('should return employee prompts', () => {
     const prompts = aiService.getSuggestedPrompts('employee', '/incidents');
-    expect(prompts).toContain("Filter active incidents");
+    expect(prompts).toContain("Summarize active incidents");
   });
 
   it('should return fan prompts', () => {
@@ -14,7 +14,7 @@ describe('aiService', () => {
 
   it('should fallback properly for unrecognized employee query', () => {
     const response = aiService._generateResponse('some random query', 'employee');
-    expect(response).toContain("Acknowledged. Logging query");
+    expect(response).toContain("Input Data: Unrecognized query string");
   });
 
   it('should fallback properly for unrecognized fan query', () => {

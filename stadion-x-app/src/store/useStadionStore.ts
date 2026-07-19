@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { getCurrentTimeString } from '../utils/dateUtils';
 
 export interface Incident {
   id: string;
@@ -77,7 +78,7 @@ export const useStadionStore = create<StadionState>((set) => ({
 
   addIncident: (incident) => {
     const id = `INC-${Math.floor(Math.random() * 1000) + 1000}`;
-    const time = new Date().toLocaleTimeString('en-GB'); // HH:MM:SS
+    const time = getCurrentTimeString(); // HH:MM:SS
     const newIncident: Incident = { ...incident, id, time, status: 'Unassigned' };
     
     set((state) => ({
@@ -96,7 +97,7 @@ export const useStadionStore = create<StadionState>((set) => ({
 
   addOrder: (order) => {
     const id = `ORD-${Math.floor(Math.random() * 10000)}`;
-    const time = new Date().toLocaleTimeString('en-GB');
+    const time = getCurrentTimeString();
     const newOrder: FoodOrder = { ...order, id, time, status: 'Preparing' };
     
     set((state) => ({

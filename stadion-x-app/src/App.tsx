@@ -1,28 +1,28 @@
 
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Auth } from './components/Auth';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { LayoutShell } from './components/layout/LayoutShell';
+import { Auth } from './auth/Auth';
+import { ProtectedRoute } from './auth/ProtectedRoute';
+import { LayoutShell } from './layouts/LayoutShell';
 import { ToastProvider } from './components/ui/ToastProvider';
 import { useAuthStore } from './store/useAuthStore';
-import { AuthProvider } from './components/AuthProvider';
+import { AuthProvider } from './auth/AuthProvider';
 
 // Lazy-loaded components (code splitting - only load when needed)
-const RoleSelection = lazy(() => import('./components/RoleSelection').then(m => ({ default: m.RoleSelection })));
-const ArcChatInterface = lazy(() => import('./components/arc/ArcChatInterface').then(m => ({ default: m.ArcChatInterface })));
+const RoleSelection = lazy(() => import('./auth/RoleSelection').then(m => ({ default: m.RoleSelection })));
+const ArcChatInterface = lazy(() => import('./features/ai/ArcChatInterface').then(m => ({ default: m.ArcChatInterface })));
 
 // Fan Components - lazy loaded
-const FanDashboard = lazy(() => import('./components/fan/FanDashboard').then(m => ({ default: m.FanDashboard })));
-const DigitalTicket = lazy(() => import('./components/fan/DigitalTicket').then(m => ({ default: m.DigitalTicket })));
-const InteractiveMap = lazy(() => import('./components/fan/InteractiveMap').then(m => ({ default: m.InteractiveMap })));
-const FoodOrdering = lazy(() => import('./components/fan/FoodOrdering').then(m => ({ default: m.FoodOrdering })));
-const PointsTable = lazy(() => import('./components/fan/PointsTable').then(m => ({ default: m.PointsTable })));
+const FanDashboard = lazy(() => import('./features/fan/FanDashboard').then(m => ({ default: m.FanDashboard })));
+const DigitalTicket = lazy(() => import('./features/ticketing/DigitalTicket').then(m => ({ default: m.DigitalTicket })));
+const InteractiveMap = lazy(() => import('./features/navigation/InteractiveMap').then(m => ({ default: m.InteractiveMap })));
+const FoodOrdering = lazy(() => import('./features/fan/FoodOrdering').then(m => ({ default: m.FoodOrdering })));
+const PointsTable = lazy(() => import('./features/tournament/PointsTable').then(m => ({ default: m.PointsTable })));
 
 // Ops Components - lazy loaded
-const OpsDashboard = lazy(() => import('./components/ops/OpsDashboard').then(m => ({ default: m.OpsDashboard })));
-const IncidentFeeds = lazy(() => import('./components/ops/IncidentFeeds').then(m => ({ default: m.IncidentFeeds })));
-const AnalyticsView = lazy(() => import('./components/ops/AnalyticsView').then(m => ({ default: m.AnalyticsView })));
+const OpsDashboard = lazy(() => import('./features/employee/OpsDashboard').then(m => ({ default: m.OpsDashboard })));
+const IncidentFeeds = lazy(() => import('./features/employee/IncidentFeeds').then(m => ({ default: m.IncidentFeeds })));
+const AnalyticsView = lazy(() => import('./features/analytics/AnalyticsView').then(m => ({ default: m.AnalyticsView })));
 
 // Loading fallback
 const PageLoader = () => (
@@ -72,25 +72,31 @@ function App() {
               </ProtectedRoute>
             } />
             
-            {/* App Routes wrapped in LayoutShell */}
-            <Route path="/*" element={
-              <ProtectedRoute>
+            {/* Fan Routes wrapped in LayoutShell */}
+            <Route path="/fan/*" element={
+              <ProtectedRoute allowedRole="fan">
                 <LayoutShell>
                   <Routes>
-                    {/* Fan Routes */}
-                    <Route path="/fan" element={<FanDashboard />} />
-                    <Route path="/fan/tickets" element={<DigitalTicket />} />
-                    <Route path="/fan/map" element={<InteractiveMap />} />
-                    <Route path="/fan/food" element={<FoodOrdering />} />
-                    <Route path="/fan/leaderboard" element={<PointsTable />} />
-
-                    {/* Employee Routes */}
-                    <Route path="/ops" element={<OpsDashboard />} />
-                    <Route path="/ops/incidents" element={<IncidentFeeds />} />
-                    <Route path="/ops/analytics" element={<AnalyticsView />} />
+                    <Route path="/" element={<FanDashboard />} />
+                    <Route path="/tickets" element={<DigitalTicket />} />
+                    <Route path="/map" element={<InteractiveMap />} />
+                    <Route path="/food" element={<FoodOrdering />} />
+                    <Route path="/leaderboard" element={<PointsTable />} />
                   </Routes>
-                  
-                  {/* Universal ARC AI Assistant */}
+                  {user && <ArcChatInterface />}
+                </LayoutShell>
+              </ProtectedRoute>
+            } />
+
+            {/* Employee Routes wrapped in LayoutShell */}
+            <Route path="/ops/*" element={
+              <ProtectedRoute allowedRole="employee">
+                <LayoutShell>
+                  <Routes>
+                    <Route path="/" element={<OpsDashboard />} />
+                    <Route path="/incidents" element={<IncidentFeeds />} />
+                    <Route path="/analytics" element={<AnalyticsView />} />
+                  </Routes>
                   {user && <ArcChatInterface />}
                 </LayoutShell>
               </ProtectedRoute>

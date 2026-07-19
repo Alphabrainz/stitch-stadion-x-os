@@ -1,7 +1,6 @@
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { Auth } from '../Auth';
+import { Auth } from '../../auth/Auth';
 import { BrowserRouter } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 
